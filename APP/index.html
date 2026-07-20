@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Entraînement gratuit et adaptatif à l'orthographe française.">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Projet Molière — Entraînement orthographe</title>
+<style>
+  :root {
+    --bg: #f4f5fb;
+    --card: #ffffff;
+    --ink: #1e2130;
+    --muted: #6b7086;
+    --accent: #4f46e5;
+    --accent-soft: #eef0ff;
+    --good: #16a34a;
+    --good-soft: #ecfdf3;
+    --bad: #dc2626;
+    --bad-soft: #fef2f2;
+    --border: #e4e6f0;
+    --radius: 14px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; padding: 24px 20px 60px; }
+
+  header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  header h1 { font-size: 1.5rem; letter-spacing: -0.02em; }
+  header .tagline { color: var(--muted); font-size: 0.9rem; }
+
+  .topstats { display: flex; gap: 10px; margin: 18px 0 26px; flex-wrap: wrap; }
+  .stat {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 12px 18px; flex: 1; min-width: 140px;
+  }
+  .stat .v { font-size: 1.4rem; font-weight: 700; }
+  .stat .l { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  .cta {
+    display: block; width: 100%; border: none; cursor: pointer;
+    background: var(--accent); color: #fff; font-size: 1.05rem; font-weight: 600;
+    padding: 16px; border-radius: var(--radius); margin-bottom: 10px;
+    transition: filter 0.15s;
+  }
+  .cta:hover { filter: brightness(1.1); }
+  .cta.secondary { background: var(--card); color: var(--accent); border: 1px solid var(--border); }
+
+  h2.section { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 28px 0 12px; }
+
+  .modules { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .modules { grid-template-columns: 1fr; } }
+  .module {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 14px 16px; cursor: pointer; text-align: left; font: inherit;
+    transition: border-color 0.15s, transform 0.1s;
+  }
+  .module:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .module .name { font-weight: 600; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .module .sub { font-size: 0.78rem; color: var(--muted); margin-bottom: 8px; }
+  .module .pct { font-size: 0.8rem; color: var(--muted); font-weight: 500; flex-shrink: 0; }
+  .bar { height: 6px; background: var(--accent-soft); border-radius: 3px; overflow: hidden; }
+  .bar > div { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.4s; }
+  .bar > div.full { background: var(--good); }
+
+  /* ---- Training screen ---- */
+  .train-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; gap: 12px; }
+  .train-head .mode { font-size: 0.85rem; color: var(--muted); }
+  .quit { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.85rem; text-decoration: underline; flex-shrink: 0; }
+
+  .dots { display: flex; gap: 6px; margin-bottom: 24px; flex-wrap: wrap; }
+  .dot { width: 22px; height: 8px; border-radius: 4px; background: var(--border); }
+  .dot.ok { background: var(--good); }
+  .dot.ko { background: var(--bad); }
+  .dot.cur { background: var(--accent); }
+
+  .question-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 28px 24px;
+  }
+  .consigne { font-size: 0.85rem; color: var(--muted); margin-bottom: 18px; }
+  .sentence { font-size: 1.4rem; line-height: 2.1; font-family: Georgia, "Times New Roman", serif; }
+  .sentence .w {
+    cursor: pointer; border-radius: 6px; padding: 1px 3px; margin: 0 -1px;
+    transition: background 0.1s;
+  }
+  .sentence.active .w:hover { background: var(--accent-soft); box-shadow: inset 0 -2px 0 var(--accent); }
+  .sentence .w.picked-ok { background: var(--good-soft); box-shadow: inset 0 -2px 0 var(--good); }
+  .sentence .w.picked-ko { background: var(--bad-soft); box-shadow: inset 0 -2px 0 var(--bad); text-decoration: line-through; }
+  .sentence .w.reveal { background: var(--good-soft); box-shadow: inset 0 -2px 0 var(--good); }
+
+  .no-fault {
+    margin-top: 22px; background: none; border: 1.5px dashed var(--border); color: var(--muted);
+    padding: 12px 18px; border-radius: 10px; cursor: pointer; font: inherit; font-size: 0.95rem;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .no-fault:hover { border-color: var(--accent); color: var(--accent); }
+  .no-fault:disabled { cursor: default; opacity: 0.5; }
+
+  .feedback { margin-top: 20px; border-radius: var(--radius); padding: 18px 20px; display: none; }
+  .feedback.show { display: block; animation: pop 0.2s ease-out; }
+  @keyframes pop { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .feedback.good { background: var(--good-soft); border: 1px solid #bbe7c9; }
+  .feedback.bad { background: var(--bad-soft); border: 1px solid #f5c2c2; }
+  .feedback .verdict { font-weight: 700; margin-bottom: 8px; }
+  .feedback.good .verdict { color: var(--good); }
+  .feedback.bad .verdict { color: var(--bad); }
+  .feedback .corrected { font-family: Georgia, serif; font-size: 1.05rem; margin-bottom: 10px; }
+  .feedback .corrected strong { color: var(--good); }
+  .feedback .rule-name { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 4px; }
+  .feedback .explain { font-size: 0.95rem; line-height: 1.55; }
+
+  .next-btn {
+    margin-top: 18px; width: 100%; border: none; cursor: pointer;
+    background: var(--accent); color: #fff; font-size: 1rem; font-weight: 600;
+    padding: 14px; border-radius: 10px; display: none;
+  }
+  .next-btn.show { display: block; }
+
+  /* ---- Results ---- */
+  .result-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px 28px; text-align: center; }
+  .result-card .big { font-size: 3rem; font-weight: 800; letter-spacing: -0.03em; }
+  .result-card .msg { color: var(--muted); margin: 8px 0 24px; }
+  .breakdown { text-align: left; margin: 0 auto 24px; max-width: 460px; }
+  .breakdown .row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 4px; border-bottom: 1px solid var(--border); font-size: 0.92rem; }
+  .breakdown .row:last-child { border-bottom: none; }
+  .breakdown .score-ok { color: var(--good); font-weight: 600; }
+  .breakdown .score-mid { color: #d97706; font-weight: 600; }
+  .breakdown .score-ko { color: var(--bad); font-weight: 600; }
+
+  .hidden { display: none !important; }
+
+  /* ---- Livret des règles ---- */
+  .rules-tools { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .rules-tools input[type="search"] {
+    flex: 1; min-width: 200px; padding: 11px 14px; border: 1px solid var(--border);
+    border-radius: 10px; font: inherit; background: var(--card); color: var(--ink);
+  }
+  .rules-tools select {
+    padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px;
+    font: inherit; background: var(--card); color: var(--ink); cursor: pointer;
+  }
+  .rules-count { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+  .rule-item {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    margin-bottom: 8px; overflow: hidden;
+  }
+  .rule-item summary {
+    padding: 13px 16px; cursor: pointer; font-weight: 600; list-style: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .rule-item summary::-webkit-details-marker { display: none; }
+  .rule-item summary:hover { background: var(--accent-soft); }
+  .rule-item .badge {
+    font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+    flex-shrink: 0; letter-spacing: 0.03em;
+  }
+  .badge.sup { background: var(--accent-soft); color: var(--accent); }
+  .badge.exc { background: #fdf3e2; color: #b45309; }
+  .rule-item .rule-body { padding: 0 16px 14px; font-size: 0.95rem; line-height: 1.6; color: var(--ink); }
+  .rule-item .rule-num { color: var(--muted); font-weight: 400; font-size: 0.8rem; margin-left: auto; flex-shrink: 0; }
+  .rule-train {
+    margin-top: 12px; border: none; cursor: pointer; background: var(--accent); color: #fff;
+    font: inherit; font-size: 0.88rem; font-weight: 600; padding: 9px 16px; border-radius: 8px;
+  }
+  .rule-train:hover { filter: brightness(1.1); }
+  .rule-mastery { display: inline-block; margin-left: 10px; font-size: 0.8rem; color: var(--muted); }
+  .journey { background: linear-gradient(135deg,#312e81,#4f46e5); color:#fff; border-radius:var(--radius); padding:22px; margin:18px 0; }
+  .journey h2 { font-size:1.15rem; margin-bottom:6px; }
+  .journey p { color:#e0e7ff; font-size:.9rem; line-height:1.5; }
+  .journey-actions { display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; }
+  .journey-actions button { border:0; border-radius:9px; padding:11px 14px; cursor:pointer; font:inherit; font-weight:650; color:var(--accent); background:#fff; }
+  .journey-actions button.ghost { color:#fff; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.3); }
+  .steps { display:grid; gap:10px; margin:14px 0 24px; }
+  .step { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:15px; display:flex; align-items:center; gap:14px; }
+  .step.current { border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft); }
+  .step.locked { opacity:.55; }
+  .step-num { width:34px; height:34px; border-radius:50%; background:var(--accent-soft); color:var(--accent); display:grid; place-items:center; font-weight:800; flex:none; }
+  .step.done .step-num { background:var(--good); color:#fff; }
+  .step-body { flex:1; } .step-body strong { display:block; margin-bottom:3px; } .step-body small { color:var(--muted); }
+  .step button { border:0; background:var(--accent); color:#fff; padding:9px 12px; border-radius:8px; font-weight:650; cursor:pointer; }
+  .example-box { margin-top:12px; padding:11px 13px; border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 8px 8px 0; }
+  .example-box b { display:block; font-size:.75rem; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+  .diagnostic-note { font-size:.86rem; color:var(--muted); margin-top:8px; }
+  .daily { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:15px 18px; margin:0 0 18px; }
+  .daily-head { display:flex; justify-content:space-between; gap:12px; margin-bottom:9px; font-size:.9rem; }
+  .daily-head span:last-child { color:var(--muted); }
+  .utility-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:10px 0 4px; }
+  .utility-grid button { background:var(--card); border:1px solid var(--border); border-radius:11px; padding:12px 8px; cursor:pointer; color:var(--ink); font:inherit; font-size:.86rem; }
+  .utility-grid button:hover { border-color:var(--accent); color:var(--accent); }
+  @media(max-width:560px){.utility-grid{grid-template-columns:1fr 1fr}.step{align-items:flex-start}.step button{margin-left:auto}}
+  .dashboard-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:16px 0; }
+  @media(max-width:560px){.dashboard-grid{grid-template-columns:1fr}}
+  .metric-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .metric-card .metric { font-size:1.7rem; font-weight:800; margin:5px 0; }
+  .metric-card small { color:var(--muted); }
+  .skill-row { background:var(--card); border:1px solid var(--border); border-radius:11px; padding:13px 15px; margin-bottom:8px; }
+  .skill-row-head { display:flex; justify-content:space-between; margin-bottom:7px; font-size:.9rem; }
+  .mistake-item { background:var(--card); border:1px solid var(--border); border-radius:11px; padding:14px 16px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+  .mistake-item small { color:var(--muted); display:block; margin-top:3px; }
+  .mistake-item button { border:0; background:var(--accent); color:#fff; padding:8px 11px; border-radius:8px; cursor:pointer; }
+  .source-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:10px; line-height:1.55; }
+  .source-card a { color:var(--accent); font-weight:650; }
+  .source-card p { font-size:.9rem; color:var(--muted); margin-top:5px; }
+  .data-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:18px; }
+  .data-actions button,.data-actions label { border:1px solid var(--border); background:var(--card); color:var(--accent); padding:10px 13px; border-radius:9px; cursor:pointer; font:inherit; }
+  .kbd { display:inline-block; padding:1px 6px; border:1px solid var(--border); border-bottom-width:2px; border-radius:5px; font-size:.75rem; color:var(--muted); background:var(--card); }
+  .exercise-list { margin-top:12px; border-top:1px solid var(--border); padding-top:10px; }
+  .exercise-list summary { padding:7px 0; font-size:.86rem; color:var(--accent); display:block; }
+  .exercise-list summary:hover { background:transparent; }
+  .exercise-row { padding:9px 10px; margin-top:6px; border-radius:8px; background:var(--bg); font-family:Georgia,serif; font-size:.9rem; }
+  .exercise-row .answer-tag { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; font-size:.68rem; font-weight:700; text-transform:uppercase; margin-right:7px; color:var(--good); }
+  .exercise-row.fault .answer-tag { color:var(--bad); }
+  .exercise-row del { color:var(--bad); } .exercise-row strong { color:var(--good); }
+  .rule-statline { margin-top:9px; color:var(--muted); font-size:.8rem; }
+  .charts-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0 6px; }
+  @media(max-width:560px){.charts-grid{grid-template-columns:1fr}}
+  .chart-card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .chart-card h3 { font-size:.95rem; margin-bottom:3px; }
+  .chart-card p { font-size:.78rem; color:var(--muted); margin-bottom:12px; }
+  .chart { display:block; width:100%; height:auto; overflow:visible; }
+  .chart text { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:var(--muted); font-size:10px; }
+  .chart .grid { stroke:var(--border); stroke-width:1; }
+  .chart .axis-label { fill:var(--muted); font-size:9px; }
+  .chart .line { fill:none; stroke:var(--accent); stroke-width:3; stroke-linecap:round; stroke-linejoin:round; }
+  .chart .area { fill:var(--accent-soft); }
+  .chart .point { fill:var(--accent); stroke:var(--card); stroke-width:2; }
+  .chart .empty { fill:var(--muted); font-size:12px; }
+  .chart .radar-grid { fill:none; stroke:var(--border); stroke-width:1; }
+  .chart .radar-shape { fill:var(--accent-soft); stroke:var(--accent); stroke-width:2; }
+  .chart .radar-point { fill:var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= HOME ================= -->
+  <div id="screen-home">
+    <header>
+      <h1>🪶 Projet Molière</h1>
+      <span class="tagline">L'entraînement à l'orthographe, gratuit et sans limite.</span>
+    </header>
+
+    <div class="topstats">
+      <div class="stat"><div class="v" id="st-total">0</div><div class="l">Réponses</div></div>
+      <div class="stat"><div class="v" id="st-rate">—</div><div class="l">Réussite</div></div>
+      <div class="stat"><div class="v" id="st-streak">0</div><div class="l">Série en cours</div></div>
+    </div>
+
+    <div class="daily">
+      <div class="daily-head"><strong>Objectif du jour</strong><span id="daily-label">0 / 20 réponses</span></div>
+      <div class="bar"><div id="daily-bar" style="width:0%"></div></div>
+    </div>
+
+    <section class="journey">
+      <h2 id="journey-title">Ton parcours personnalisé</h2>
+      <p id="journey-text">Commence par un test de positionnement : le parcours s'adaptera à tes points forts et à tes difficultés.</p>
+      <div class="journey-actions">
+        <button id="btn-continue">Commencer le test</button>
+        <button class="ghost" id="btn-progress">Voir mon parcours</button>
+      </div>
+    </section>
+
+    <button class="cta" id="btn-quick">⚡ Entraînement rapide — 10 phrases adaptées à ton niveau</button>
+    <button class="cta secondary" id="btn-rules">📖 Le livret des règles — chaque règle expliquée, avec ses exercices</button>
+    <div class="utility-grid">
+      <button id="btn-review">🧠 Révisions dues</button>
+      <button id="btn-dashboard">📊 Mes statistiques</button>
+      <button id="btn-mistakes">📝 Mes erreurs</button>
+      <button id="btn-sources">🔎 Sources fiables</button>
+      <button id="btn-export">💾 Sauvegarder</button>
+      <button id="btn-import">📥 Restaurer</button>
+      <input type="file" id="import-file" accept="application/json" class="hidden">
+    </div>
+    <button class="cta secondary" id="btn-reset">Réinitialiser ma progression</button>
+
+    <h2 class="section">S'entraîner par thème</h2>
+    <div class="modules" id="modules"></div>
+  </div>
+
+  <!-- ================= STATISTIQUES ================= -->
+  <div id="screen-dashboard" class="hidden">
+    <div class="train-head"><span class="mode">📊 Mes statistiques</span><button class="quit back-home">Retour</button></div>
+    <h1>Tableau de progression</h1>
+    <div class="dashboard-grid" id="dashboard-metrics"></div>
+    <h2 class="section">Évolution</h2>
+    <div class="charts-grid">
+      <section class="chart-card"><h3>Réussite quotidienne</h3><p>Les 14 derniers jours d'entraînement.</p><div id="dashboard-evolution"></div></section>
+      <section class="chart-card"><h3>Carte des compétences</h3><p>Ta maîtrise actuelle par domaine.</p><div id="dashboard-radar"></div></section>
+    </div>
+    <h2 class="section">Maîtrise par compétence</h2><div id="dashboard-skills"></div>
+    <h2 class="section">Règles qui posent problème</h2><div id="dashboard-rules"></div>
+    <h2 class="section">Derniers tests</h2><div id="dashboard-tests"></div>
+  </div>
+
+  <!-- ================= CARNET D'ERREURS ================= -->
+  <div id="screen-mistakes" class="hidden">
+    <div class="train-head"><span class="mode">📝 Mon carnet d'erreurs</span><button class="quit back-home">Retour</button></div>
+    <h1>Les règles à revoir</h1><p class="diagnostic-note">Les erreurs fréquentes sont classées en premier et reviennent dans les révisions espacées.</p>
+    <div id="mistakes-list" style="margin-top:16px"></div>
+  </div>
+
+  <!-- ================= SOURCES ================= -->
+  <div id="screen-sources" class="hidden">
+    <div class="train-head"><span class="mode">🔎 Sources et méthode</span><button class="quit back-home">Retour</button></div>
+    <h1>Des références ouvertes et vérifiables</h1>
+    <p class="diagnostic-note" style="margin-bottom:16px">Les formulations et exercices de Projet Molière sont originaux. Ces ressources servent à vérifier les règles, l'usage et le vocabulaire.</p>
+    <div class="source-card"><a href="https://vitrinelinguistique.oqlf.gouv.qc.ca/banque-de-depannage-linguistique" target="_blank" rel="noopener">Banque de dépannage linguistique — OQLF</a><p>Référence publique sur l'orthographe, la grammaire, la syntaxe, la ponctuation et les difficultés d'usage.</p></div>
+    <div class="source-card"><a href="https://www.dictionnaire-academie.fr/" target="_blank" rel="noopener">Dictionnaire de l'Académie française</a><p>Définitions, conjugaisons, rectifications de 1990 et notices « Dire, ne pas dire ».</p></div>
+    <div class="source-card"><a href="https://www.lexique.org/" target="_blank" rel="noopener">Lexique 4 — New & Pallier</a><p>Base lexicale de 190 000 formes avec fréquences et catégories grammaticales, sous licence CC BY-SA 4.0.</p></div>
+    <div class="source-card"><a href="https://www.data.gouv.fr/datasets/base-franceterme-termes-scientifiques-et-techniques-1" target="_blank" rel="noopener">FranceTerme — Ministère de la Culture</a><p>Termes scientifiques et techniques recommandés au Journal officiel, en Licence Ouverte.</p></div>
+    <div class="source-card"><a href="https://www.cnrtl.fr/" target="_blank" rel="noopener">CNRTL — CNRS / ATILF</a><p>Portail lexical et accès à Morphalou, lexique morphologique ouvert du français.</p></div>
+  </div>
+
+  <!-- ================= PARCOURS ================= -->
+  <div id="screen-progress" class="hidden">
+    <div class="train-head"><span class="mode">🗺️ Mon parcours</span><button class="quit" id="btn-progress-back">Retour</button></div>
+    <h1>Un apprentissage par étapes</h1>
+    <p class="diagnostic-note" id="progress-summary"></p>
+    <div class="steps" id="steps"></div>
+  </div>
+
+  <!-- ================= RULE BOOK ================= -->
+  <div id="screen-rules" class="hidden">
+    <div class="train-head">
+      <span class="mode">📖 Le livret des règles</span>
+      <button class="quit" id="btn-rules-back">Retour</button>
+    </div>
+    <div class="rules-tools">
+      <input type="search" id="rules-search" placeholder="Rechercher une règle (ex : participe, tout, censé…)">
+      <select id="rules-level">
+        <option value="">Tous niveaux</option>
+        <option value="sup">Supérieur (700 pts)</option>
+        <option value="exc">Excellence (900-1000 pts)</option>
+      </select>
+      <select id="rules-theme">
+        <option value="">Tous thèmes</option>
+        <option value="orth">Homophones & orthographe</option>
+        <option value="verbe">Conjugaison & participes</option>
+        <option value="accord">Accords</option>
+        <option value="adv">Adverbes</option>
+        <option value="signes">Accents, traits d'union, majuscules</option>
+        <option value="syntaxe">Syntaxe</option>
+        <option value="conf">Confusions & sens des mots</option>
+        <option value="cond">Tours à éviter</option>
+      </select>
+    </div>
+    <div class="rules-count" id="rules-count"></div>
+    <div id="rules-list"></div>
+  </div>
+
+  <!-- ================= TRAINING ================= -->
+  <div id="screen-train" class="hidden">
+    <div class="train-head">
+      <span class="mode" id="train-mode"></span>
+      <button class="quit" id="btn-quit">Quitter</button>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="question-card">
+      <div class="consigne">Cette phrase contient-elle une faute ? Clique sur le mot fautif, ou indique qu'il n'y a pas de faute.</div>
+      <div class="sentence active" id="sentence"></div>
+      <button class="no-fault" id="btn-nofault">✓ Il n'y a pas de faute</button>
+      <div class="feedback" id="feedback">
+        <div class="verdict" id="fb-verdict"></div>
+        <div class="corrected" id="fb-corrected"></div>
+        <div class="rule-name" id="fb-rule"></div>
+        <div class="explain" id="fb-explain"></div>
+      </div>
+      <button class="next-btn" id="btn-next">Phrase suivante →</button>
+    </div>
+  </div>
+
+  <!-- ================= RESULTS ================= -->
+  <div id="screen-result" class="hidden">
+    <div class="result-card">
+      <div class="big" id="res-score"></div>
+      <div class="msg" id="res-msg"></div>
+      <div class="breakdown" id="res-breakdown"></div>
+      <button class="cta" id="btn-again">Recommencer un entraînement</button>
+      <button class="cta secondary" id="btn-home">Retour à l'accueil</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="rules-superieur.js"></script>
+<script src="rules-excellence.js"></script>
+<script src="exos-homophones.js"></script>
+<script src="exos-lexique.js"></script>
+<script src="exos-verbes-sup.js"></script>
+<script src="exos-accords-sup.js"></script>
+<script src="exos-verbes-exc.js"></script>
+<script src="exos-accords-exc.js"></script>
+<script src="exos-signes.js"></script>
+<script src="exos-confusions.js"></script>
+<script src="exos-enrichis.js"></script>
+<script src="exos-complements.js"></script>
+<script src="exos-qualite.js"></script>
+<script src="exos-curated-batch1.js"></script>
+<script src="exos-curated-batch2.js"></script>
+<script src="exos-curated-batch3.js"></script>
+<script src="exos-curated-batch4.js"></script>
+<script src="exos-curated-batch5.js"></script>
+<script src="exos-curated-batch6.js"></script>
+<script src="exos-curated-batch7.js"></script>
+<script src="exos-curated-batch8.js"></script>
+<script src="exos-curated-batch9.js"></script>
+<script src="exos-curated-batch10.js"></script>
+<script>
+/* ============================================================
+   DONNÉES : règles + exercices
+   Règles : { n, th, t, e } dans rules-*.js
+   Exercices : window.EX = window.EX.concat([["R1","… [faute→correction] …"], …])
+   Une entrée sans [→] est une phrase sans faute.
+   ============================================================ */
+const ALL_RULES = (window.RULES_SUP || []).map(r => ({ ...r, lvl: "sup" }))
+  .concat((window.RULES_EXC || []).map(r => ({ ...r, lvl: "exc" })));
+function ruleKey(n) {
+  const m = n.match(/^R(\d+)(?:-(\d+))?$/);
+  return m ? (+m[1]) * 100 + (m[2] ? +m[2] : 0) : 999999;
+}
+ALL_RULES.sort((a, b) => ruleKey(a.n) - ruleKey(b.n));
+const RULE_BY_NUM = Object.fromEntries(ALL_RULES.map(r => [r.n, r]));
+
+const THEME_NAMES = {
+  orth: "Homophones & orthographe", verbe: "Conjugaison & participes", accord: "Accords",
+  adv: "Adverbes", signes: "Signes & majuscules", syntaxe: "Syntaxe",
+  conf: "Confusions & sens", cond: "Tours à éviter"
+};
+const THEME_ICONS = {
+  orth: "🔤", verbe: "🧩", accord: "🤝", adv: "🎯",
+  signes: "✒️", syntaxe: "🏗️", conf: "🎭", cond: "🚫"
+};
+const COURSE = [
+  { name:"Les fondamentaux", desc:"Homophones usuels et mots indispensables · niveau 700", themes:["orth"], lvl:"sup" },
+  { name:"Verbes et conjugaison", desc:"Terminaisons, modes et formes verbales · niveau 700", themes:["verbe"], lvl:"sup" },
+  { name:"Maîtriser les accords", desc:"Noms, adjectifs et participes passés · niveau 700", themes:["accord"], lvl:"sup" },
+  { name:"Écrire avec précision", desc:"Adverbes, syntaxe et signes · niveau 700", themes:["adv","syntaxe","signes"], lvl:"sup" },
+  { name:"Éviter les confusions", desc:"Sens des mots et emplois délicats · niveau 700", themes:["conf","cond"], lvl:"sup" },
+  { name:"Excellence : verbes avancés", desc:"Participes subtils et accords du verbe · niveau 900+", themes:["verbe"], lvl:"exc" },
+  { name:"Excellence : accords experts", desc:"Adjectifs, tout, adverbes en -ment · niveau 900+", themes:["accord","adv"], lvl:"exc" },
+  { name:"Excellence : lexique et signes", desc:"Orthographe rare, traits d'union, majuscules · niveau 900+", themes:["orth","signes","syntaxe"], lvl:"exc" },
+  { name:"Excellence : pièges de sens", desc:"Paronymes et tours critiqués · niveau 900+", themes:["conf","cond"], lvl:"exc" },
+  { name:"Examen blanc", desc:"Un test complet couvrant tout le programme", themes:Object.keys(THEME_NAMES) }
+];
+
+/* Les lots éditorialement validés remplacent intégralement les anciennes
+   phrases de la règle : aucun mélange avec des variantes non contrôlées. */
+if (window.CURATED_EX) {
+  const curatedIds = new Set(Object.keys(window.CURATED_EX));
+  window.EX = (window.EX || []).filter(([rn]) => !curatedIds.has(rn));
+  for (const [rn, exercises] of Object.entries(window.CURATED_EX)) {
+    exercises.forEach(text => window.EX.push([rn, text]));
+  }
+}
+
+/* ---- parsing des exercices ---- */
+const ITEMS = [];
+(window.EX || []).forEach((row, idx) => {
+  const [ruleNum, text] = row;
+  const rule = RULE_BY_NUM[ruleNum];
+  if (!rule) { console.warn("Règle inconnue :", ruleNum, text); return; }
+  const m = text.match(/\[([^\]]+?)→([^\]]+?)\]/);
+  let tokens, faultIdx = -1, wrong = null, right = null;
+  if (m) {
+    wrong = m[1]; right = m[2];
+    const before = text.slice(0, m.index).trimEnd();
+    let after = text.slice(m.index + m[0].length);
+    // ponctuation collée après le crochet : rattachée au mot fautif
+    let punct = "";
+    const pm = after.match(/^[.,;:!?…»)]+/);
+    if (pm) { punct = pm[0]; after = after.slice(pm[0].length); }
+    after = after.trimStart();
+    const beforeTokens = before ? before.split(" ") : [];
+    const afterTokens = after ? after.split(" ") : [];
+    faultIdx = beforeTokens.length;
+    tokens = beforeTokens.concat([wrong + punct]).concat(afterTokens);
+    right = right + punct;
+  } else {
+    tokens = text.split(" ");
+  }
+  ITEMS.push({ id: idx, r: ruleNum, rule, tokens, faultIdx, right, raw: text });
+});
+const EX_BY_RULE = {};
+ITEMS.forEach(it => { (EX_BY_RULE[it.r] = EX_BY_RULE[it.r] || []).push(it); });
+
+/* Contrôle éditorial explicite des règles composées déjà révisées.
+   Une série n'est marquée « vérifiée » que si chaque sous-notion apparaît
+   et si elle contient assez de phrases correctes et fautives. */
+const QUALITY_REQUIREMENTS = Object.assign({
+  R324: ["au jour", "heure de temps", "pied d'égalité"],
+  R325: ["autrement plus", "voire même"],
+  R326: ["collabor", "entraider", "veto"],
+  R327: ["mineur", "panacée"],
+  R328: ["unanim", "tous"]
+}, window.CURATED_COVERAGE || {});
+function qualityAudit(ruleNum) {
+  const exos = EX_BY_RULE[ruleNum] || [], hay = normalizeForAudit(exos.map(x=>x.raw).join(" "));
+  const required = QUALITY_REQUIREMENTS[ruleNum] || [];
+  const faults = exos.filter(x=>x.faultIdx>=0).length, correct = exos.length-faults;
+  return { ok: exos.length===10 && faults===8 && correct===2 && required.every(k=>hay.includes(normalizeForAudit(k))), exos:exos.length, faults, correct, missing:required.filter(k=>!hay.includes(normalizeForAudit(k))) };
+}
+function normalizeForAudit(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+const QUALITY_REPORT = Object.fromEntries(Object.keys(QUALITY_REQUIREMENTS).map(rn=>[rn,qualityAudit(rn)]));
+window.PROJET_MOLIERE_QUALITY_REPORT = QUALITY_REPORT;
+
+/* ============================================================
+   PROGRESSION (localStorage) — maîtrise par règle
+   ============================================================ */
+const STORE_KEY = "projet-moliere-v2";
+function defaultState() {
+  return { total: 0, correct: 0, streak: 0, mastery: {}, recent: [], diagnosticDone: false, courseStep: 0, stepsDone: [], tests: [], days: {}, history: {}, mistakes: {}, reviews: {}, ruleStats: {} };
+}
+function loadState() {
+  try {
+    const loaded = JSON.parse(localStorage.getItem(STORE_KEY)) || {};
+    const merged = Object.assign(defaultState(), loaded);
+    ["mastery","recent","tests","days","history","mistakes","reviews","ruleStats","stepsDone"].forEach(k => { if (!merged[k]) merged[k] = defaultState()[k]; });
+    return merged;
+  }
+  catch { return defaultState(); }
+}
+let state = loadState();
+function saveState() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+function dayKey(d = new Date()) { return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+
+function masteryOf(ruleNum) {
+  return state.mastery[ruleNum] !== undefined ? state.mastery[ruleNum] : null;
+}
+function recordAnswer(ruleNum, ok) {
+  state.total++;
+  if (ok) { state.correct++; state.streak++; } else { state.streak = 0; }
+  const m = state.mastery[ruleNum];
+  const cur = m === undefined ? 0.4 : m;
+  state.mastery[ruleNum] = Math.min(1, Math.max(0, cur + (ok ? 0.15 : -0.2)));
+  const today = dayKey();
+  state.days[today] = state.days[today] || { total:0, correct:0 };
+  state.days[today].total++;
+  if (ok) state.days[today].correct++;
+  const theme = RULE_BY_NUM[ruleNum]?.th;
+  state.history[today] = state.history[today] || { total:0, correct:0, themes:{} };
+  state.history[today].total++;
+  if (ok) state.history[today].correct++;
+  if (theme) {
+    state.history[today].themes[theme] = state.history[today].themes[theme] || { total:0, correct:0 };
+    state.history[today].themes[theme].total++;
+    if (ok) state.history[today].themes[theme].correct++;
+  }
+  if (!ok) state.mistakes[ruleNum] = (state.mistakes[ruleNum] || 0) + 1;
+  else if (state.mistakes[ruleNum]) state.mistakes[ruleNum] = Math.max(0, state.mistakes[ruleNum] - .25);
+  state.ruleStats[ruleNum] = state.ruleStats[ruleNum] || { total:0, correct:0 };
+  state.ruleStats[ruleNum].total++;
+  if (ok) state.ruleStats[ruleNum].correct++;
+  const old = state.reviews[ruleNum] || { interval:0 };
+  const interval = ok ? (old.interval ? Math.min(180, Math.max(1, Math.round(old.interval * 2.2))) : 1) : 1;
+  state.reviews[ruleNum] = { interval, due: Date.now() + interval * 86400000, last: Date.now(), ok };
+  saveState();
+}
+function themeMastery(th) {
+  const nums = Object.keys(EX_BY_RULE).filter(n => RULE_BY_NUM[n].th === th);
+  const vals = nums.map(masteryOf).filter(v => v !== null);
+  if (!vals.length) return null;
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+
+/* ============================================================
+   SÉLECTION ADAPTATIVE
+   ============================================================ */
+function pickSession(filter, n = 10) {
+  let pool = ITEMS;
+  if (filter && filter.rule) pool = ITEMS.filter(i => i.r === filter.rule);
+  else if (filter && filter.theme) pool = ITEMS.filter(i => i.rule.th === filter.theme);
+  else if (filter && filter.themes) pool = ITEMS.filter(i => filter.themes.includes(i.rule.th));
+  else if (filter && filter.rules) pool = ITEMS.filter(i => filter.rules.includes(i.r));
+  if (filter && filter.lvl) pool = pool.filter(i => i.rule.lvl === filter.lvl);
+  /* montée en difficulté : les règles 900+ restent rares tant que le niveau 700
+     n'est pas bien engagé (≥ 30 règles abordées et maîtrise moyenne ≥ 60 %) */
+  let excGate = 1;
+  if (!(filter && (filter.rule || filter.rules || filter.lvl))) {
+    const supVals = ALL_RULES.filter(r => r.lvl === "sup").map(r => state.mastery[r.n]).filter(v => v !== undefined);
+    const supAvg = supVals.length ? supVals.reduce((a, b) => a + b, 0) / supVals.length : 0;
+    if (supVals.length < 30 || supAvg < 0.6) excGate = 0.12;
+  }
+  const recent = new Set(state.recent);
+  const weighted = pool.map(it => {
+    const m = masteryOf(it.r);
+    let w = 1 + (m === null ? 0.8 : (1 - m) * 2.2);
+    if (it.rule.lvl === "exc") w *= excGate;
+    const review = state.reviews[it.r];
+    if (review && review.due <= Date.now()) w *= 3;
+    if (state.mistakes[it.r]) w *= 1 + Math.min(2, state.mistakes[it.r] / 3);
+    if (recent.has(it.id)) w *= 0.12;
+    return { it, w };
+  });
+  const session = [], used = new Set();
+  while (session.length < Math.min(n, pool.length)) {
+    let totalW = 0;
+    for (const x of weighted) if (!used.has(x.it.id)) totalW += x.w;
+    let r = Math.random() * totalW;
+    for (const x of weighted) {
+      if (used.has(x.it.id)) continue;
+      r -= x.w;
+      if (r <= 0) { session.push(x.it); used.add(x.it.id); break; }
+    }
+  }
+  return session;
+}
+
+/* ============================================================
+   UI
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const screens = { home: $("screen-home"), train: $("screen-train"), result: $("screen-result"), rules: $("screen-rules"), progress: $("screen-progress"), dashboard: $("screen-dashboard"), mistakes: $("screen-mistakes"), sources: $("screen-sources") };
+function show(name) {
+  for (const k in screens) screens[k].classList.toggle("hidden", k !== name);
+  window.scrollTo(0, 0);
+}
+
+function renderHome() {
+  $("st-total").textContent = state.total;
+  $("st-rate").textContent = state.total ? Math.round(100 * state.correct / state.total) + " %" : "—";
+  $("st-streak").textContent = state.streak;
+  const today = state.days[dayKey()] || { total:0 };
+  $("daily-label").textContent = today.total + " / 20 réponses";
+  $("daily-bar").style.width = Math.min(100, today.total / 20 * 100) + "%";
+  $("daily-bar").classList.toggle("full", today.total >= 20);
+  if (state.diagnosticDone) {
+    const current = COURSE[Math.min(state.courseStep, COURSE.length - 1)];
+    $("journey-title").textContent = "Étape " + (state.courseStep + 1) + " sur " + COURSE.length + " · " + current.name;
+    $("journey-text").textContent = "Poursuis ton parcours. Les notions fragiles reviennent automatiquement jusqu'à leur maîtrise.";
+    $("btn-continue").textContent = "Continuer mon parcours";
+  } else {
+    $("journey-title").textContent = "Ton parcours personnalisé";
+    $("journey-text").textContent = "Fais le test de positionnement… ou ouvre « Voir mon parcours » et choisis librement ton étape de départ.";
+    $("btn-continue").textContent = "Commencer le test";
+  }
+  const box = $("modules");
+  box.innerHTML = "";
+  for (const th in THEME_NAMES) {
+    const nRules = ALL_RULES.filter(r => r.th === th).length;
+    const nEx = ITEMS.filter(i => i.rule.th === th).length;
+    if (!nEx) continue;
+    const m = themeMastery(th);
+    const pct = m === null ? null : Math.round(m * 100);
+    const btn = document.createElement("button");
+    btn.className = "module";
+    btn.innerHTML = `
+      <div class="name"><span>${THEME_ICONS[th]} ${THEME_NAMES[th]}</span><span class="pct">${pct === null ? "nouveau" : pct + " %"}</span></div>
+      <div class="sub">${nRules} règles · ${nEx} exercices</div>
+      <div class="bar"><div class="${pct !== null && pct >= 90 ? "full" : ""}" style="width:${pct || 0}%"></div></div>`;
+    btn.onclick = () => startSession({ theme: th });
+    box.appendChild(btn);
+  }
+}
+
+/* ---- livret ---- */
+function normalize(s) {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+}
+function escapeHTML(s) { return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]); }
+function exercisePreview(text) {
+  const m = text.match(/\[([^\]]+?)→([^\]]+?)\]/);
+  if (!m) return `<div class="exercise-row"><span class="answer-tag">correcte</span>${escapeHTML(text)}</div>`;
+  const before = escapeHTML(text.slice(0,m.index)), after = escapeHTML(text.slice(m.index+m[0].length));
+  return `<div class="exercise-row fault"><span class="answer-tag">à corriger</span>${before}<del>${escapeHTML(m[1])}</del> → <strong>${escapeHTML(m[2])}</strong>${after}</div>`;
+}
+function renderRules() {
+  const words = normalize($("rules-search").value.trim()).split(/\s+/).filter(Boolean);
+  const lvl = $("rules-level").value;
+  const th = $("rules-theme").value;
+  const list = $("rules-list");
+  list.innerHTML = "";
+  let shown = 0;
+  for (const r of ALL_RULES) {
+    if (lvl && r.lvl !== lvl) continue;
+    if (th && r.th !== th) continue;
+    const hay = normalize(r.t + " " + r.e);
+    if (words.length && !words.every(w => hay.includes(w))) continue;
+    shown++;
+    const exos = EX_BY_RULE[r.n] || [];
+    const m = masteryOf(r.n);
+    const d = document.createElement("details");
+    d.className = "rule-item";
+    const badge = r.lvl === "sup"
+      ? '<span class="badge sup">700</span>'
+      : '<span class="badge exc">900+</span>';
+    const cleanExample = exos.length ? exos[0].raw.replace(/\[([^\]→]+)→([^\]]+)\]/, "$2") : "";
+    const example = cleanExample ? `<div class="example-box"><b>Exemple</b>${cleanExample}</div>` : "";
+    const trainBtn = exos.length
+      ? `<button class="rule-train" data-rule="${r.n}">S'entraîner — ${exos.length} exercice${exos.length > 1 ? "s" : ""}</button>` +
+        (m !== null ? `<span class="rule-mastery">maîtrise : ${Math.round(m * 100)} %</span>` : "")
+      : "";
+    const stat = state.ruleStats[r.n];
+    const statline = stat ? `<div class="rule-statline">${stat.correct}/${stat.total} bonnes réponses · ${Math.round(stat.correct/stat.total*100)} % de réussite</div>` : '<div class="rule-statline">Pas encore travaillée</div>';
+    const quality = QUALITY_REPORT[r.n];
+    const qualityLine = quality?.ok ? '<div class="rule-statline" style="color:var(--good)">✓ Série éditoriale vérifiée : notions couvertes, cas corrects et fautifs</div>' : '';
+    const exerciseList = `<details class="exercise-list"><summary>Afficher la liste des ${exos.length} exercices</summary>${exos.map(x=>exercisePreview(x.raw)).join("")}</details>`;
+    d.innerHTML = `<summary>${badge}<span>${r.t}</span><span class="rule-num">${r.n} · ${THEME_NAMES[r.th] || ""}</span></summary>
+      <div class="rule-body">${r.e}${example}${trainBtn ? "<div>" + trainBtn + "</div>" : ""}${statline}${qualityLine}${exerciseList}</div>`;
+    list.appendChild(d);
+  }
+  list.querySelectorAll(".rule-train").forEach(b => {
+    b.onclick = () => startSession({ rule: b.dataset.rule }, (EX_BY_RULE[b.dataset.rule] || []).length, "rule");
+  });
+  const nEx = ITEMS.length;
+  const nVerified = Object.values(QUALITY_REPORT).filter(x=>x.ok).length;
+  $("rules-count").textContent = shown + " règle" + (shown > 1 ? "s" : "") + " sur " + ALL_RULES.length +
+    " · " + nEx + " exercices réellement rédigés · " + nVerified + " séries sur " + ALL_RULES.length + " validées au format 8 fautives / 2 correctes";
+}
+$("rules-search").oninput = renderRules;
+$("rules-level").onchange = renderRules;
+$("rules-theme").onchange = renderRules;
+$("btn-rules").onclick = () => {
+  $("rules-search").value = "";
+  $("rules-level").value = "";
+  $("rules-theme").value = "";
+  renderRules();
+  show("rules");
+};
+$("btn-rules-back").onclick = () => { renderHome(); show("home"); };
+
+/* ---- session ---- */
+let session = [], pos = 0, results = [], answered = false, sessionFilter = null, sessionKind = "practice", sessionSize = 10;
+
+function startSession(filter, n = 10, kind = "practice") {
+  sessionFilter = filter || null;
+  sessionKind = kind;
+  sessionSize = n;
+  session = pickSession(filter, n);
+  if (!session.length) return;
+  pos = 0; results = [];
+  let label = "Entraînement rapide · adapté à ton niveau";
+  if (filter && filter.rule) label = "Règle " + filter.rule + " : " + RULE_BY_NUM[filter.rule].t;
+  else if (filter && filter.theme) label = "Thème : " + THEME_NAMES[filter.theme];
+  if (kind === "diagnostic") label = "Test de positionnement · " + n + " questions";
+  if (kind === "course") label = "Parcours · " + COURSE[state.courseStep].name;
+  $("train-mode").textContent = label;
+  show("train");
+  renderQuestion();
+}
+
+function renderDots() {
+  const box = $("dots");
+  box.innerHTML = "";
+  session.forEach((_, i) => {
+    const d = document.createElement("div");
+    d.className = "dot " + (i < results.length ? (results[i].ok ? "ok" : "ko") : (i === pos ? "cur" : ""));
+    box.appendChild(d);
+  });
+}
+
+function renderQuestion() {
+  answered = false;
+  renderDots();
+  const it = session[pos];
+  const s = $("sentence");
+  s.classList.add("active");
+  s.innerHTML = "";
+  it.tokens.forEach((w, i) => {
+    const span = document.createElement("span");
+    span.className = "w";
+    span.textContent = w;
+    span.onclick = () => answer(it, i);
+    s.appendChild(span);
+    if (i < it.tokens.length - 1) s.appendChild(document.createTextNode(" "));
+  });
+  $("btn-nofault").disabled = false;
+  $("btn-nofault").onclick = () => answer(it, -1);
+  $("feedback").className = "feedback";
+  $("btn-next").className = "next-btn";
+}
+
+function answer(it, clickedIdx) {
+  if (answered) return;
+  answered = true;
+  const hasFault = it.faultIdx >= 0;
+  const ok = hasFault ? clickedIdx === it.faultIdx : clickedIdx === -1;
+  results.push({ ok, r: it.r });
+  recordAnswer(it.r, ok);
+  state.recent = (state.recent.concat(it.id)).slice(-60);
+  saveState();
+
+  const s = $("sentence");
+  s.classList.remove("active");
+  const spans = s.querySelectorAll(".w");
+  if (clickedIdx >= 0) spans[clickedIdx].classList.add(ok ? "picked-ok" : "picked-ko");
+  if (hasFault && clickedIdx !== it.faultIdx) spans[it.faultIdx].classList.add("reveal");
+  $("btn-nofault").disabled = true;
+
+  const fb = $("feedback");
+  fb.className = "feedback show " + (ok ? "good" : "bad");
+  $("fb-verdict").textContent = ok ? "✓ Bonne réponse !" : "✗ Raté…";
+  if (hasFault) {
+    const corrected = it.tokens.map((w, i) => i === it.faultIdx ? "<strong>" + it.right + "</strong>" : w).join(" ");
+    $("fb-corrected").innerHTML = "Phrase corrigée : " + corrected;
+  } else {
+    $("fb-corrected").innerHTML = "Cette phrase ne contenait <strong>aucune faute</strong>.";
+  }
+  $("fb-rule").textContent = "Règle " + it.r + " (" + (it.rule.lvl === "sup" ? "niveau 700" : "niveau 900+") + ") : " + it.rule.t;
+  $("fb-explain").textContent = it.rule.e;
+  renderDots();
+  $("btn-next").className = "next-btn show";
+  $("btn-next").textContent = pos === session.length - 1 ? "Voir mes résultats →" : "Phrase suivante →";
+}
+
+$("btn-next").onclick = () => {
+  pos++;
+  if (pos >= session.length) renderResults();
+  else renderQuestion();
+};
+
+function renderResults() {
+  const good = results.filter(r => r.ok).length;
+  $("res-score").textContent = good + " / " + results.length;
+  const pct = good / results.length;
+  if (sessionKind === "diagnostic") {
+    state.diagnosticDone = true;
+    state.courseStep = weakestCourseStep();
+    state.tests.push({ type:"positionnement", date:new Date().toISOString(), score:Math.round(pct * 100) });
+    saveState();
+  } else if (sessionKind === "course" && pct >= .8) {
+    if (!state.stepsDone.includes(state.courseStep)) state.stepsDone.push(state.courseStep);
+    let next = state.courseStep;
+    while (next < COURSE.length - 1 && state.stepsDone.includes(next)) next++;
+    state.courseStep = next;
+    state.tests.push({ type:"étape", date:new Date().toISOString(), score:Math.round(pct * 100) });
+    saveState();
+  }
+  $("res-msg").textContent =
+    pct === 1 ? "Sans faute ! Molière serait fier de toi. 🎉" :
+    pct >= 0.8 ? "Très solide. Encore quelques nuances à ancrer." :
+    pct >= 0.5 ? "Bonne base — les règles ratées reviendront plus souvent." :
+    "Courage : l'entraînement adaptatif va cibler ces règles en priorité.";
+  const byRule = {};
+  for (const r of results) {
+    byRule[r.r] = byRule[r.r] || { ok: 0, n: 0 };
+    byRule[r.r].n++;
+    if (r.ok) byRule[r.r].ok++;
+  }
+  const box = $("res-breakdown");
+  box.innerHTML = "";
+  for (const rn in byRule) {
+    const b = byRule[rn];
+    const cls = b.ok === b.n ? "score-ok" : (b.ok === 0 ? "score-ko" : "score-mid");
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML = `<span>${rn} · ${RULE_BY_NUM[rn].t}</span><span class="${cls}">${b.ok}/${b.n}</span>`;
+    box.appendChild(row);
+  }
+  show("result");
+}
+
+function stepMastery(step) {
+  const nums = ALL_RULES.filter(r => step.themes.includes(r.th) && (!step.lvl || r.lvl === step.lvl)).map(r => r.n);
+  const vals = nums.map(n => state.mastery[n]).filter(v => v !== undefined);
+  return vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+}
+function weakestCourseStep() {
+  /* on démarre toujours dans les paliers 700 : le plus faible des cinq premiers */
+  let best = 0, score = Infinity;
+  COURSE.slice(0, 5).forEach((step, i) => {
+    const avg = stepMastery(step);
+    if (avg < score) { score = avg; best = i; }
+  });
+  return best;
+}
+
+function renderProgress() {
+  const box = $("steps"); box.innerHTML = "";
+  $("progress-summary").textContent =
+    "Commence où tu veux : chaque étape est libre. Obtiens au moins 80 % pour la valider (✓). Le test de positionnement, facultatif, te suggère simplement un point de départ.";
+  COURSE.forEach((step, i) => {
+    const done = state.stepsDone.includes(i);
+    const current = i === state.courseStep;
+    const row = document.createElement("div");
+    row.className = "step " + (done ? "done" : current ? "current" : "");
+    const pctTxt = (() => { const m = stepMastery(step); return m ? Math.round(m * 100) + " %" : ""; })();
+    row.innerHTML = `<div class="step-num">${done ? "✓" : i+1}</div><div class="step-body"><strong>${step.name}</strong><small>${step.desc}${pctTxt ? " · maîtrise " + pctTxt : ""}</small></div><button>${done ? "Revoir" : current ? "Commencer" : "Choisir"}</button>`;
+    row.querySelector("button").onclick = () => {
+      state.courseStep = i;
+      state.diagnosticDone = true;
+      saveState();
+      startSession({themes:step.themes, lvl:step.lvl}, i === COURSE.length-1 ? 30 : 15, "course");
+    };
+    box.appendChild(row);
+  });
+}
+
+function dailyStreak() {
+  let n = 0, d = new Date();
+  while ((state.days[dayKey(d)] || {}).total) { n++; d.setDate(d.getDate()-1); }
+  return n;
+}
+
+function recentDayKeys(count = 14) {
+  const out = [], d = new Date();
+  for (let i = count - 1; i >= 0; i--) {
+    const x = new Date(d); x.setDate(d.getDate() - i); out.push(dayKey(x));
+  }
+  return out;
+}
+function shortDate(key) { const [,m,d] = key.split("-"); return d + "/" + m; }
+function renderEvolutionChart() {
+  const keys = recentDayKeys(), values = keys.map(k => {
+    const data = state.history[k] || state.days[k];
+    return data?.total ? Math.round(data.correct / data.total * 100) : null;
+  });
+  const holder = $("dashboard-evolution");
+  if (!values.some(v => v !== null)) {
+    holder.innerHTML = '<svg class="chart" viewBox="0 0 360 160" role="img" aria-label="Aucune donnée de réussite quotidienne"><text class="empty" x="180" y="82" text-anchor="middle">Les premiers résultats apparaîtront ici.</text></svg>';
+    return;
+  }
+  const w = 360, h = 170, left = 28, right = 10, top = 12, bottom = 28, pw = w-left-right, ph = h-top-bottom;
+  const point = (v,i) => ({ x:left + i*pw/(keys.length-1), y:top + (100-v)*ph/100 });
+  const points = values.map((v,i) => v === null ? null : point(v,i));
+  const segments = []; let current = [];
+  points.forEach(p => { if (p) current.push(p); else if (current.length) { segments.push(current); current=[]; } }); if (current.length) segments.push(current);
+  const lineParts = segments.map(s => `<path class="line" d="M${s.map(p=>p.x.toFixed(1)+","+p.y.toFixed(1)).join(" L")}"/>`).join("");
+  const dots = points.filter(Boolean).map(p=>`<circle class="point" cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4"/>`).join("");
+  const grid = [0,50,100].map(v => { const y=top+(100-v)*ph/100; return `<line class="grid" x1="${left}" x2="${w-right}" y1="${y}" y2="${y}"/><text x="2" y="${y+3}">${v}%</text>`; }).join("");
+  const labels = keys.map((k,i) => i % 3 === 0 || i === keys.length-1 ? `<text class="axis-label" x="${point(0,i).x}" y="${h-8}" text-anchor="middle">${shortDate(k)}</text>` : "").join("");
+  holder.innerHTML = `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Évolution du taux de réussite sur les quatorze derniers jours"><title>Évolution du taux de réussite</title>${grid}${lineParts}${dots}${labels}</svg>`;
+}
+function renderRadarChart() {
+  const themes = Object.keys(THEME_NAMES), values = themes.map(th => themeMastery(th));
+  const holder = $("dashboard-radar");
+  if (!values.some(v => v !== null)) {
+    holder.innerHTML = '<svg class="chart" viewBox="0 0 360 160" role="img" aria-label="Aucune compétence mesurée"><text class="empty" x="180" y="82" text-anchor="middle">Réponds à quelques phrases pour mesurer tes compétences.</text></svg>';
+    return;
+  }
+  const w=360,h=220,cx=180,cy=112,r=76,n=themes.length;
+  const xy=(i,scale=1)=>{const a=-Math.PI/2+i*2*Math.PI/n; return {x:cx+Math.cos(a)*r*scale,y:cy+Math.sin(a)*r*scale};};
+  const polygon=scale=>Array.from({length:n},(_,i)=>{const p=xy(i,scale);return p.x.toFixed(1)+","+p.y.toFixed(1)}).join(" ");
+  const grid=[.25,.5,.75,1].map(s=>`<polygon class="radar-grid" points="${polygon(s)}"/>`).join("");
+  const axes=themes.map((th,i)=>{const p=xy(i),label=xy(i,1.28);return `<line class="grid" x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}"/><text x="${label.x}" y="${label.y+3}" text-anchor="middle">${THEME_NAMES[th].split(" & ")[0]}</text>`;}).join("");
+  const data=values.map((v,i)=>{const p=xy(i,v||0);return p.x.toFixed(1)+","+p.y.toFixed(1)}).join(" ");
+  const dots=values.map((v,i)=>{const p=xy(i,v||0);return `<circle class="radar-point" cx="${p.x}" cy="${p.y}" r="3"/>`;}).join("");
+  holder.innerHTML = `<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="Carte de maîtrise par compétence"><title>Carte des compétences</title>${grid}${axes}<polygon class="radar-shape" points="${data}"/>${dots}</svg>`;
+}
+
+function renderDashboard() {
+  const learned = Object.values(state.mastery).filter(v => v >= .8).length;
+  const xp = state.correct * 10 + learned * 25;
+  const due = Object.values(state.reviews).filter(r => r.due <= Date.now()).length;
+  $("dashboard-metrics").innerHTML = `
+    <div class="metric-card"><small>Expérience</small><div class="metric">${xp} XP</div><small>Niveau ${Math.floor(xp/500)+1}</small></div>
+    <div class="metric-card"><small>Règles maîtrisées</small><div class="metric">${learned}</div><small>sur ${ALL_RULES.length}</small></div>
+    <div class="metric-card"><small>Assiduité</small><div class="metric">${dailyStreak()} jour${dailyStreak()>1?'s':''}</div><small>série quotidienne</small></div>
+    <div class="metric-card"><small>À réviser</small><div class="metric">${due}</div><small>révisions arrivées à échéance</small></div>`;
+  renderEvolutionChart();
+  renderRadarChart();
+  const skills = $("dashboard-skills"); skills.innerHTML = "";
+  Object.keys(THEME_NAMES).forEach(th => {
+    const m = themeMastery(th), pct = Math.round((m || 0)*100);
+    const ruleNums = ALL_RULES.filter(r=>r.th===th).map(r=>r.n);
+    const totals = ruleNums.reduce((a,rn)=>{const s=state.ruleStats[rn]; if(s){a.total+=s.total;a.correct+=s.correct;} return a;},{total:0,correct:0});
+    const accuracy = totals.total ? Math.round(totals.correct/totals.total*100)+" % de réussite · "+totals.total+" réponses" : "pas encore travaillé";
+    const row = document.createElement("div"); row.className="skill-row";
+    row.innerHTML=`<div class="skill-row-head"><span>${THEME_ICONS[th]} ${THEME_NAMES[th]}</span><strong>${m===null?'nouveau':pct+' % de maîtrise'}</strong></div><div class="bar"><div class="${pct>=90?'full':''}" style="width:${pct}%"></div></div><small>${accuracy}</small>`;
+    skills.appendChild(row);
+  });
+  const problemBox = $("dashboard-rules"); problemBox.innerHTML="";
+  const problemRules = Object.entries(state.ruleStats).filter(([,s])=>s.total>0).sort((a,b)=>{
+    const rateA=a[1].correct/a[1].total, rateB=b[1].correct/b[1].total;
+    return rateA-rateB || b[1].total-a[1].total;
+  });
+  if(!problemRules.length) problemBox.innerHTML='<p class="diagnostic-note">Les statistiques détaillées apparaîtront après les premiers exercices.</p>';
+  problemRules.forEach(([rn,s])=>{ const r=RULE_BY_NUM[rn], rate=Math.round(s.correct/s.total*100); const row=document.createElement("div"); row.className="mistake-item";
+    row.innerHTML=`<div><strong>${r.t}</strong><small>${rn} · ${THEME_NAMES[r.th]} · ${s.correct}/${s.total} bonnes réponses · ${rate} %</small><div class="bar" style="margin-top:7px"><div class="${rate>=90?'full':''}" style="width:${rate}%"></div></div></div><button>Travailler</button>`;
+    row.querySelector("button").onclick=()=>startSession({rule:rn},(EX_BY_RULE[rn]||[]).length,"rule"); problemBox.appendChild(row); });
+  const tests = $("dashboard-tests"); tests.innerHTML = state.tests.length ? "" : '<p class="diagnostic-note">Aucun test terminé.</p>';
+  state.tests.slice(-8).reverse().forEach(t => {
+    const row=document.createElement("div"); row.className="skill-row";
+    row.innerHTML=`<div class="skill-row-head"><span>${t.type}</span><strong>${t.score} %</strong></div><small>${new Date(t.date).toLocaleDateString('fr-FR')}</small>`; tests.appendChild(row);
+  });
+}
+
+function renderMistakes() {
+  const list=$("mistakes-list"); list.innerHTML="";
+  const entries=Object.entries(state.mistakes).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
+  if(!entries.length){ list.innerHTML='<div class="source-card">Aucune erreur enregistrée pour le moment. Lance un entraînement pour commencer.</div>'; return; }
+  entries.forEach(([rn,n])=>{ const row=document.createElement("div"); row.className="mistake-item";
+    row.innerHTML=`<div><strong>${RULE_BY_NUM[rn].t}</strong><small>${rn} · ${Math.ceil(n)} erreur${n>1?'s':''} · maîtrise ${Math.round((masteryOf(rn)||0)*100)} %</small></div><button>Réviser</button>`;
+    row.querySelector("button").onclick=()=>startSession({rule:rn},(EX_BY_RULE[rn]||[]).length,"rule"); list.appendChild(row); });
+}
+
+function dueRules() {
+  return Object.entries(state.reviews).filter(([,r])=>r.due<=Date.now()).sort((a,b)=>a[1].due-b[1].due).map(([rn])=>rn);
+}
+
+function exportProgress() {
+  const blob=new Blob([JSON.stringify({app:"Projet Molière",version:3,exportedAt:new Date().toISOString(),state},null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="projet-moliere-progression.json"; a.click(); URL.revokeObjectURL(a.href);
+}
+
+/* ---- navigation ---- */
+$("btn-quick").onclick = () => startSession(null);
+$("btn-continue").onclick = () => state.diagnosticDone
+  ? startSession({themes:COURSE[state.courseStep].themes, lvl:COURSE[state.courseStep].lvl}, state.courseStep === COURSE.length-1 ? 30 : 15, "course")
+  : startSession(null, 30, "diagnostic");
+$("btn-progress").onclick = () => { renderProgress(); show("progress"); };
+$("btn-progress-back").onclick = () => { renderHome(); show("home"); };
+$("btn-again").onclick = () => startSession(sessionFilter, sessionSize, sessionKind);
+$("btn-dashboard").onclick = () => { renderDashboard(); show("dashboard"); };
+$("btn-mistakes").onclick = () => { renderMistakes(); show("mistakes"); };
+$("btn-sources").onclick = () => show("sources");
+document.querySelectorAll(".back-home").forEach(b=>b.onclick=()=>{renderHome();show("home")});
+$("btn-review").onclick = () => { const rules=dueRules(); if(rules.length) startSession({rules},Math.min(15,rules.length*2),"review"); else startSession(null,10,"practice"); };
+$("btn-export").onclick = exportProgress;
+$("btn-import").onclick = () => $("import-file").click();
+$("import-file").onchange = e => { const f=e.target.files[0]; if(!f)return; const reader=new FileReader(); reader.onload=()=>{try{const data=JSON.parse(reader.result); state=Object.assign(defaultState(),data.state||data); saveState(); renderHome(); alert("Progression restaurée.");}catch{alert("Ce fichier de sauvegarde n'est pas valide.");}}; reader.readAsText(f); };
+$("btn-home").onclick = () => { renderHome(); show("home"); };
+$("btn-quit").onclick = () => { renderHome(); show("home"); };
+$("btn-reset").onclick = () => {
+  if (confirm("Effacer toute ta progression ?")) {
+    state = defaultState();
+    saveState();
+    renderHome();
+  }
+};
+
+renderHome();
+show("home");
+
+document.addEventListener("keydown", e => {
+  if (screens.train.classList.contains("hidden") || answered) return;
+  if (e.key.toLowerCase() === "n" || e.key === "0") $("btn-nofault").click();
+  if (e.key === "Escape") $("btn-quit").click();
+});
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>

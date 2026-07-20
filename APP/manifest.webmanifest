@@ -1,0 +1,13 @@
+{
+  "name": "Projet Molière — Orthographe",
+  "short_name": "Molière",
+  "description": "Entraînement gratuit, progressif et adaptatif à l'orthographe française.",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f5fb",
+  "theme_color": "#4f46e5",
+  "icons": [
+    { "src": "moliere-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
