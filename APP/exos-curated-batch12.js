@@ -1,0 +1,173 @@
+/* Lot éditorial vérifié 12 — adverbes, signes et syntaxe du niveau 700 (étape 4).
+   R136, R137, R151, R218, R190, R192, R193, R195, R205, R210, R212, R219, R220, R221.
+   Chaque règle : 8 phrases fautives couvrant les sous-cas + 2 phrases correctes. */
+window.CURATED_EX = Object.assign(window.CURATED_EX || {}, {
+  R136: [
+    "Il conduit [prudament→prudemment] sous la pluie.",
+    "Elle parle [couremment→couramment] le portugais.",
+    "Ils se voient [fréquament→fréquemment] depuis la rentrée.",
+    "Le vent souffle [violament→violemment] sur la côte.",
+    "Elle répond [patiement→patiemment] à chaque question.",
+    "Il a répliqué [méchament→méchamment], puis s'est excusé.",
+    "Le téléphone sonne [constament→constamment] depuis ce matin.",
+    "Elle a plaidé [élégament→élégamment] sa cause.",
+    "Elle parle couramment l'italien et conduit prudemment.",
+    "Il répond patiemment, même quand on l'interroge méchamment."
+  ],
+  R137: [
+    "Elles sont restées [debouts→debout] pendant tout le concert.",
+    "Ils voyagent toujours [ensembles→ensemble].",
+    "Les spectateurs, [debouts→debout], applaudissaient à tout rompre.",
+    "Nous avons travaillé [ensembles→ensemble] sur ce dossier.",
+    "Ces murs sont encore [debouts→debout] après le séisme.",
+    "Les enfants jouent [ensembles→ensemble] dans la cour.",
+    "Restez [debouts→debout] jusqu'au signal du chef de chœur.",
+    "Ils ont chanté [ensembles→ensemble] jusqu'à minuit.",
+    "Les invités sont restés debout et ont chanté ensemble.",
+    "Debout depuis l'aube, elles ont tout préparé ensemble."
+  ],
+  R151: [
+    "Elle est [tout→toute] pâle depuis cette nouvelle.",
+    "Elles sont [tout→toutes] tremblantes de froid.",
+    "Elle est [toute→tout] émue de vous revoir.",
+    "Elles sont [toutes→tout] heureuses d'être là.",
+    "Ils sont [tous→tout] étonnés du résultat.",
+    "Elle parlait [toute→tout] doucement à l'oreille du cheval.",
+    "Elles sont [tout→toutes] honteuses de leur bêtise.",
+    "La cuisine est [tout→toute] neuve depuis les travaux.",
+    "Elle est tout heureuse, mais toute rouge d'avoir couru.",
+    "Ils sont tout surpris de cette visite imprévue."
+  ],
+  R218: [
+    "[Mr→M.] Dupont vous attend dans son bureau.",
+    "[Mme.→Mme] Lefèvre a laissé un message.",
+    "[MM→MM.] Durand et Petit dirigent l'atelier.",
+    "[Mlle.→Mlle] Roy assure la permanence.",
+    "[M→M.] le maire inaugure la nouvelle salle.",
+    "[Mrs→MM.] Blanc et Noir présideront la séance.",
+    "[Mmes.→Mmes] Roche et Vidal arrivent demain.",
+    "[Mr.→M.] Martin a signé le contrat hier.",
+    "M. et Mme Dubois vous remercient de votre accueil.",
+    "MM. Leroy et Simon recevront Mlle Girard à dix heures."
+  ],
+  R190: [
+    "Chaque matin, elle [achete→achète] le journal.",
+    "Je [prefere→préfère] partir avant la nuit.",
+    "Il [appèle→appelle] son frère tous les dimanches.",
+    "Ce [modele→modèle] n'est plus fabriqué.",
+    "Le [college→collège] rouvre ses portes lundi.",
+    "Nous avons relu la [regle→règle] ensemble.",
+    "Il a passé son [éxamen→examen] sans stress.",
+    "Elle [espere→espère] une réponse rapide.",
+    "Il préfère régler ce problème avant la rentrée.",
+    "Elle espère que le collège acceptera son dossier."
+  ],
+  R192: [
+    "Le [mais→maïs] a bien poussé cet été.",
+    "Ils décorent le sapin avant [Noel→Noël].",
+    "L'[heroine→héroïne] du roman traverse le désert.",
+    "Quelle étrange [coincidence→coïncidence] !",
+    "Ce raisonnement est un peu [naif→naïf].",
+    "Un enfant [egoiste→égoïste] refuse de partager.",
+    "Ils descendent la rivière en [canoe→canoë].",
+    "Une douleur [aigue→aiguë] lui traversa le dos.",
+    "Le maïs a été récolté avant Noël.",
+    "Cette coïncidence naïve amusa l'héroïne."
+  ],
+  R193: [
+    "Nous [commencons→commençons] la répétition à huit heures.",
+    "Il a [recu→reçu] son colis ce matin.",
+    "Ce [garcon→garçon] joue du violon depuis cinq ans.",
+    "La [lecon→leçon] de piano dure une heure.",
+    "Elle parle [francais→français] sans le moindre accent.",
+    "Il [replaca→replaça] le livre sur l'étagère.",
+    "Un [merçi→merci] sincère vaut mieux qu'un cadeau.",
+    "[Çes→Ces] enfants jouent dans la cour depuis midi.",
+    "Nous commençons la leçon de français à neuf heures.",
+    "Il a reçu un merci sincère de ce garçon."
+  ],
+  R195: [
+    "[Lorsque il→Lorsqu'il] pleut, il reste à lire.",
+    "[Lorsque elle→Lorsqu'elle] entre, tout le monde se tait.",
+    "Nous avons visité une [presque île→presqu'île] bretonne.",
+    "[Si il→S'il] neige demain, nous resterons ici.",
+    "[Si ils→S'ils] acceptent, nous signerons ce soir.",
+    "Je [te aime→t'aime] plus que tout au monde.",
+    "Il a [presqu'achevé→presque achevé] son roman.",
+    "[S'elle→Si elle] venait, je serais ravi.",
+    "S'il pleut lorsqu'ils arriveront, nous resterons à l'abri.",
+    "La presqu'île est presque inhabitée en hiver."
+  ],
+  R205: [
+    "Ils ont monté le meuble [eux même→eux-mêmes].",
+    "Elle a tout organisé [elle même→elle-même].",
+    "Nous ferons les démarches [nous même→nous-mêmes].",
+    "Faites-le [vous même→vous-mêmes], ce sera plus rapide.",
+    "Je m'en occuperai [moi même→moi-même].",
+    "Ils se contredisent [eux mêmes→eux-mêmes].",
+    "C'est [ici-même→ici même] que le traité fut signé.",
+    "[Cela-même→Cela même] ne suffira pas à le convaincre.",
+    "Nous avons peint la cuisine nous-mêmes.",
+    "C'est ici même qu'il a prononcé ce discours."
+  ],
+  R210: [
+    "[Viendra-t'il→Viendra-t-il] à la réunion de mardi ?",
+    "[A-t'elle→A-t-elle] reçu notre message ?",
+    "[Va-t'on→Va-t-on] enfin commencer ?",
+    "[Ira-t'il→Ira-t-il] jusqu'au bout de son projet ?",
+    "[Prend-t-il→Prend-il] le train de nuit ?",
+    "[Dort-t-elle→Dort-elle] encore à cette heure ?",
+    "[Parle t-il→Parle-t-il] espagnol couramment ?",
+    "[Vend-t-elle→Vend-elle] encore des billets ?",
+    "Que va-t-on faire de tout ce bois ?",
+    "Viendra-t-il avant que nous partions ?"
+  ],
+  R212: [
+    "Le feu de la [saint-Jean→Saint-Jean] illumine le village.",
+    "Ils ont visité l'église [saint-Pierre→Saint-Pierre].",
+    "Les [Dieux→dieux] grecs habitaient l'Olympe.",
+    "Chaque soir, elle prie [dieu→Dieu] avant de dormir.",
+    "La chapelle [sainte-Anne→Sainte-Anne] domine la baie.",
+    "[Saint→saint] François prêchait aux oiseaux.",
+    "Le mont [saint-Michel→Saint-Michel] attire les foules.",
+    "Les pompiers fêtent la [sainte-Barbe→Sainte-Barbe] en décembre.",
+    "Le jour de la Saint-Jean, on célèbre saint Jean Baptiste.",
+    "Les dieux de l'Olympe n'ont rien du Dieu des monothéistes."
+  ],
+  R219: [
+    "Est-ce que [viens-tu→tu viens] ce soir ?",
+    "Est-ce que [a-t-il→il a] compris la consigne ?",
+    "Est-ce que [pourrez-vous→vous pourrez] nous rejoindre ?",
+    "Est-ce que [sont-ils→ils sont] déjà partis ?",
+    "Est-ce que [as-tu→tu as] fermé la porte ?",
+    "Est-ce que [veut-elle→elle veut] encore du thé ?",
+    "Est-ce que [faut-il→il faut] réserver à l'avance ?",
+    "Est-ce que [savez-vous→vous savez] où il habite ?",
+    "Est-ce que tu viendras demain matin ?",
+    "Viendras-tu demain matin ?"
+  ],
+  R220: [
+    "Je me demande [est-ce qu'il→s'il] viendra.",
+    "Dis-moi [où est-ce que tu→où tu] as rangé les clés.",
+    "J'ignore [quand partira-t-il→quand il partira].",
+    "Elle demande [qu'est-ce que tu→ce que tu] veux vraiment.",
+    "Je ne sais pas [où est-il→où il est] passé.",
+    "Il se demande [comment ferons-nous→comment nous ferons].",
+    "Nous cherchons à savoir [qui est-ce qui→qui] a prévenu la police.",
+    "Demande-lui [quand est-ce qu'il→quand il] rentre.",
+    "Je me demande s'il viendra demain.",
+    "Dis-moi ce que tu veux vraiment."
+  ],
+  R221: [
+    "On [a→n'a] rien vu de la scène.",
+    "On [en→n'en] veut plus, de ces réunions interminables.",
+    "On [y→n'y] va jamais en plein hiver.",
+    "On [a→n'a] plus de pain depuis hier.",
+    "On [en→n'en] parle jamais devant lui.",
+    "On [a→n'a] aucune preuve de sa présence.",
+    "On [y→n'y] comprend rien à ce règlement.",
+    "On [a→n'a] guère le choix, cette fois.",
+    "On n'a jamais autant ri qu'à cette soirée.",
+    "On en reparlera demain, à tête reposée."
+  ],
+});
