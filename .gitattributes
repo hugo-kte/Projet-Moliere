@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Les fichiers de calendrier (iCalendar) exigent des fins de ligne CRLF
+*.ics text eol=crlf

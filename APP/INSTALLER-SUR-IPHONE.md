@@ -64,6 +64,15 @@ Le dossier fonctionne aussi en local : il suffit d'ouvrir `index.html` dans un n
 - Elle serait perdue si l'icône était supprimée de l'écran d'accueil, ou si les données de
   Safari étaient effacées.
 
+## Rappel quotidien et défis entre amis
+
+- **Rappel** : dans l'app, *Réglages* (ou *Rappel quotidien*) → choisir une heure. iOS propose
+  d'ajouter un événement quotidien au Calendrier, avec une alerte. Pour l'arrêter, il suffit de
+  supprimer l'événement dans le Calendrier.
+- **Défis** : en fin de séance, *Envoyer le défi* ouvre la feuille de partage (Messages, WhatsApp…).
+  Le lien contient les phrases et le score ; il ne fonctionne que si l'app est **en ligne**
+  (étape 1), pas quand elle est ouverte en local sur un ordinateur.
+
 ---
 
 ## Contenu du paquet
@@ -72,7 +81,10 @@ Le dossier fonctionne aussi en local : il suffit d'ouvrir `index.html` dans un n
 |---|---|
 | `index.html` | L'application complète (interface et moteur) |
 | `rules-*.js` | Les 341 fiches de règles, avec leurs explications |
-| `exos-*.js` | Les exercices (1797 phrases) |
+| `exos-*.js` | Les exercices (3 410 phrases) |
+| `parcours.js`, `difficulte.js`, `astuces.js` | Le parcours, la difficulté des règles, les « bons réflexes » |
+| `anecdotes.js` | Les anecdotes « Le saviez-vous ? » |
+| `rappels/` | Les rappels quotidiens à ajouter au calendrier (un fichier par heure) |
 | `sw.js` | Le service worker : permet le fonctionnement hors ligne |
 | `manifest.webmanifest` | Déclare l'application installable (nom, icônes, couleurs) |
 | `*.png`, `*.svg` | Les icônes, dont celle de l'écran d'accueil iOS |

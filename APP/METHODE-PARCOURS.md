@@ -24,6 +24,8 @@ Ce document explique comment le parcours d'apprentissage est construit : ce qu'o
 - **Entrelacer les règles voisines.** La pratique entrelacée (mélanger des types de problèmes) aide à les discriminer. → Dans une leçon, deux questions consécutives ne portent jamais sur la même règle quand c'est possible ; les contrôles mélangent toutes les règles du chapitre.
 - **Montrer un exemple avant de faire pratiquer un débutant** (effet de l'exemple résolu). → Chaque fiche présente une phrase fautive corrigée et une phrase correcte, avant la première question.
 - **Un retour immédiat qui explique.** → Après chaque réponse : la phrase corrigée et la règle (comme le Projet Voltaire).
+- **Produire plutôt que reconnaître.** Ce qu'on génère soi-même se retient mieux que ce qu'on lit (*effet de génération*, Slamecka et Graf, 1978). → Après avoir trouvé une faute, l'apprenant écrit la bonne forme ; la dictée et la relecture d'un texte font écrire et relire comme dans la vraie vie.
+- **La performance du moment n'est pas l'apprentissage.** Réussir plusieurs fois une règle dans la même séance montre qu'on l'a comprise, pas qu'on la retiendra ; c'est la réussite *différée* qui prédit la mémorisation (Soderstrom et Bjork, 2015). → Une règle n'est « acquise » qu'une fois réussie à nouveau un autre jour.
 
 ---
 
@@ -40,7 +42,13 @@ Ce document explique comment le parcours d'apprentissage est construit : ce qu'o
 
 **Le contrôle de chapitre** : toutes les règles du chapitre mélangées, sans indice, **80 % requis**, plus 2 questions de révision des chapitres précédents (hors note). On peut le passer d'emblée : s'il est réussi, les leçons sont validées (comme le « test de passage » de Duolingo).
 
-**Maîtriser avant d'avancer** : une règle est *acquise* après quatre bonnes réponses d'affilée ; un chapitre est *maîtrisé* 👑 quand son contrôle est réussi **et** toutes ses règles acquises. Sinon, une *consolidation* ne propose que les règles manquantes, jusqu'à ce qu'elles tiennent. Le bouton « Continuer » ne passe au chapitre suivant qu'à ce moment-là, et saute les leçons dont toutes les règles sont déjà acquises.
+**Maîtriser avant d'avancer**, en deux temps :
+- une règle est *réussie* après quatre bonnes réponses d'affilée. Un chapitre est *terminé* quand son contrôle est réussi **et** toutes ses règles réussies ; sinon, une *consolidation* ne propose que les règles manquantes, jusqu'à ce qu'elles tiennent. Le bouton « Continuer » passe alors au chapitre suivant, et saute les leçons dont toutes les règles sont déjà réussies ;
+- une règle devient *acquise* quand elle est réussie à nouveau **un autre jour** (deux jours distincts de bonnes réponses depuis la dernière erreur). Elle revient d'elle-même dans les révisions du lendemain. Un chapitre est *maîtrisé* 👑 quand toutes ses règles sont acquises ; sur la carte, un nœud ⏳ signale les règles encore à confirmer.
+
+**Écrire la correction** : quand la faute est trouvée, l'apprenant écrit la bonne forme (une barre d'accents aide sur téléphone). La réponse n'est juste que si les deux le sont ; une faute repérée mais mal corrigée apparaît en orange et compte comme une erreur pour la maîtrise. L'étape n'est proposée que lorsque la correction est unique (2 508 phrases sur 2 728 phrases fautives) : pas pour les tours à reformuler (« solutionner » → « résoudre » ou « régler »). La comparaison tolère les apostrophes typographiques, la majuscule en début de phrase et les graphies rectifiées de 1990, sauf quand l'exercice porte justement sur elles. Le test complet, le positionnement et les défis restent au format du Certificat (repérer seulement). L'étape peut être désactivée dans les réglages.
+
+**Révisions espacées** : après une réussite, une règle revient le lendemain, puis à intervalles multipliés par 2,2. L'intervalle ne grandit qu'avec une réussite un autre jour : plusieurs bonnes réponses dans la même séance ne repoussent plus la révision de plusieurs semaines. Une erreur ramène la règle au lendemain.
 
 **L'ordre des chapitres** suit trois principes :
 1. *Difficulté croissante* (section 4) ;
@@ -155,7 +163,21 @@ Résultat : **3 410 exercices** (341 règles × 10) et **341 « bons réflexes �
 
 ---
 
-## 6. Sources
+## 6. Revenir chaque jour
+
+La régularité compte plus que la durée : quelques minutes par jour, espacées, valent mieux qu'une longue séance hebdomadaire. L'app cherche donc à faire revenir, sans culpabiliser ni tricher (pas de faux classement contre de faux joueurs).
+
+- **Série et gels de série** : la série compte les jours d'entraînement consécutifs. Tant que la journée n'est pas faite, la série de la veille s'affiche « à sauver ». Un gel, gagné tous les 7 jours d'affilée (2 au maximum), protège automatiquement un jour oublié.
+- **Objectif du jour réglable** : 10, 20, 40 ou 60 réponses. En fin de séance, l'app indique ce qu'il reste et propose de le compléter.
+- **Rappel quotidien** : un événement récurrent ajouté au calendrier du téléphone (fichiers `rappels/*.ics`, un par heure proposée). Il ne demande aucun serveur et fonctionne même app fermée.
+- **Score estimé sur 1000** (échelle du Certificat Voltaire, indicatif) : pour chaque règle, une probabilité de réussite part de sa difficulté mesurée (section 4), est ajustée au niveau de départ de l'apprenant (ses premières réponses, avant entraînement), puis remplacée progressivement par sa maîtrise réelle. Le score pondère le niveau 700 (70 %) et l'Excellence (30 %). Repères : tout le niveau 700 acquis ≈ 780 ; tout acquis = 1000. Il s'affiche après 20 réponses ou le test de positionnement, avec sa progression sur 7 jours.
+- **Récompenses de fin de séance** : niveau atteint, objectif du jour, série, gel gagné, record, progression du score, et 21 succès à collectionner. Les moments forts (couronne, niveau validé, succès) se partagent en image.
+- **Modes de jeu** pour varier : *dictée* (la phrase est lue, on écrit le mot piège), *relecture* (trouver toutes les fautes d'un texte de six phrases, sans fausse alerte), *éclair* (un maximum de bonnes réponses en 60 secondes) et *défi* (un lien contient les 10 phrases et le score ; l'ami les rejoue et compare, sans compte ni serveur). Ces modes puisent dans les règles déjà travaillées et celles du chapitre en cours.
+- **Le saviez-vous ?** : une anecdote sur la langue en fin de séance (`anecdotes.js`).
+
+---
+
+## 7. Sources
 
 - Baromètre Voltaire 2019 — classement des 84 règles de référence : <https://www.datapressepremium.com/rmdiff/2010266/BarometreVoltaire2019_Dossierclassement15-25etgeneral1.pdf>
 - Baromètre Voltaire 2016 — nombre moyen d'exercices par règle : <https://www.centre-inffo.fr/content/uploads/2016/05/barometre-voltaire-2016.pdf>
@@ -163,6 +185,8 @@ Résultat : **3 410 exercices** (341 règles × 10) et **341 « bons réflexes �
 - Éduscol — repères annuels de progression, étude de la langue : <https://eduscol.education.fr/document/18124/download>
 - DEPP, Note d'information n° 28 (2016) — les performances en orthographe des élèves en fin d'école primaire : <https://www.education.gouv.fr/media/11051/download>
 - Dunlosky J. et al. (2013), *Improving Students' Learning With Effective Learning Techniques*, Psychological Science in the Public Interest 14(1) : <https://www.whz.de/fileadmin/lehre/hochschuldidaktik/docs/dunloskiimprovingstudentlearning.pdf>
+- Slamecka N. J. et Graf P. (1978), *The Generation Effect: Delineation of a Phenomenon*, Journal of Experimental Psychology: Human Learning and Memory 4(6), 592-604.
+- Soderstrom N. C. et Bjork R. A. (2015), *Learning Versus Performance: An Integrative Review*, Perspectives on Psychological Science 10(2), 176-199.
 - Duolingo — structure du parcours : <https://duoplanet.com/duolingo-learning-path/>
 - Khan Academy — niveaux de maîtrise : <https://support.khanacademy.org/hc/en-us/articles/5548760867853--How-do-Khan-Academy-s-Mastery-levels-work>
 - Projet Voltaire — fonctionnement et critiques : <https://sydo.fr/sydologie/outils/projet-voltaire-quand-les-neurosciences-servent-la-cause-de-lorthographe/>
