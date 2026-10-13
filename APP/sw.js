@@ -1,12 +1,12 @@
 /* Service worker « réseau d'abord » : l'application reste utilisable hors ligne,
    mais une version mise à jour est toujours servie dès que le réseau répond.
    (L'ancienne stratégie « cache d'abord » figeait l'application sur une version périmée.) */
-const CACHE = "projet-moliere-v22";
+const CACHE = "projet-moliere-v24";
 const ASSETS = [
   "./", "./index.html", "./manifest.webmanifest", "./moliere-icon.svg",
   "./apple-touch-icon.png", "./icon-192.png", "./icon-512.png",
   "./rules-superieur.js", "./rules-excellence.js",
-  "./difficulte.js", "./parcours.js", "./astuces.js",
+  "./difficulte.js", "./parcours.js", "./astuces.js", "./anecdotes.js",
   "./exos-homophones.js", "./exos-lexique.js", "./exos-verbes-sup.js",
   "./exos-accords-sup.js", "./exos-verbes-exc.js", "./exos-accords-exc.js",
   "./exos-signes.js", "./exos-confusions.js", "./exos-enrichis.js",
