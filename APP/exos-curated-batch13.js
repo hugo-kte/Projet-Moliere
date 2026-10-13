@@ -1,0 +1,161 @@
+/* Lot éditorial vérifié 13 — confusions et emplois du niveau 700 (étape 5).
+   R2, R223, R239, R248, R257, R283, R302, R306, R310, R314, R315, R321, R322.
+   Chaque règle : 8 phrases fautives couvrant les sous-cas + 2 phrases correctes. */
+window.CURATED_EX = Object.assign(window.CURATED_EX || {}, {
+  R283: [
+    "Courrier à [l'intention→l'attention] de Mme la directrice.",
+    "Une fête a été organisée à [l'attention→l'intention] des bénévoles.",
+    "Note à [l'intention→l'attention] du service comptable.",
+    "Il a composé cette berceuse à [l'attention→l'intention] de sa fille.",
+    "Ce dossier est transmis à [l'intention→l'attention] du directeur.",
+    "Un stage à [l'attention→l'intention] des débutants ouvre en mai.",
+    "Rapport à [l'intention→l'attention] du conseil d'administration.",
+    "Elle a écrit ce poème à [l'attention→l'intention] de ses élèves.",
+    "À l'attention du service clients : ce colis a été retourné.",
+    "Cette soirée est organisée à l'intention des nouveaux élèves."
+  ],
+  R239: [
+    "La rumeur s'est [avérée fausse→révélée fausse] dès le lendemain.",
+    "Son alibi s'est [avéré faux→révélé faux] après vérification.",
+    "Ce remède s'est [avéré vrai→avéré] parfaitement efficace.",
+    "La piste s'est [avérée fausse→révélée fausse] après enquête.",
+    "Le diagnostic s'est [avéré faux→révélé faux] en quelques jours.",
+    "Cette hypothèse s'est [avérée vraie→vérifiée] point par point.",
+    "Le témoignage s'est [avéré mensonger→révélé mensonger].",
+    "Sa prédiction s'est [avérée vraie→réalisée] dès l'année suivante.",
+    "Ce choix s'est avéré judicieux sur le long terme.",
+    "La méthode s'est avérée efficace dès la première semaine."
+  ],
+  R248: [
+    "[À l'instard→À l'instar] de son père, il est devenu médecin.",
+    "[À l'instant→À l'instar] de ses aînés, elle a choisi le droit.",
+    "[Aux instars→À l'instar] de ses collègues, il part à la retraite.",
+    "[A l'instar→À l'instar] de Paris, Lyon rénove ses quais.",
+    "[À l'instar que→À l'instar de] ses voisins, il isole sa toiture.",
+    "[À linstar→À l'instar] de ses amis, il voyage sans bagage.",
+    "[À l'instar à→À l'instar de] sa sœur, elle apprend le violon.",
+    "[À l'instar→Contrairement] à ses frères, qui détestent lire, elle dévore les romans.",
+    "À l'instar de sa mère, elle est devenue architecte.",
+    "À l'instar des grandes capitales, la ville piétonnise son centre."
+  ],
+  R257: [
+    "Cette revue [bimensuelle→bimestrielle] paraît tous les deux mois.",
+    "Une réunion [bimestrielle→bimensuelle] se tient les 1er et 15.",
+    "Ce magazine [bimensuel→bimestriel] sort en janvier, mars et mai.",
+    "Le comité siège deux fois par mois : c'est un rythme [bimestriel→bimensuel].",
+    "Un bulletin [bimensuel→bimestriel] paraît six fois par an.",
+    "Cette plante fleurit tous les deux ans : elle est [biannuelle→bisannuelle].",
+    "Ce rapport [biannuel→bisannuel] ne paraît que tous les deux ans.",
+    "Une visite [bihebdomadaire→hebdomadaire] a lieu chaque lundi.",
+    "Cette revue bimestrielle paraît six fois par an.",
+    "La réunion bimensuelle a lieu les premier et troisième mardis."
+  ],
+  R302: [
+    "Nul n'est [sensé→censé] ignorer la loi.",
+    "Voilà une proposition [censée→sensée] et réaliste.",
+    "Tu es [sensé→censé] rendre ce dossier demain.",
+    "Un homme [censé→sensé] ne prendrait pas ce risque.",
+    "Ce train est [sensé→censé] arriver à midi.",
+    "Elle a tenu des propos très [censés→sensés].",
+    "Nous sommes [sensés→censés] respecter le protocole.",
+    "Sa réaction, bien que vive, reste [censée→sensée].",
+    "Il est censé travailler, mais sa réponse reste sensée.",
+    "Tu es censé savoir que cette décision est sensée."
+  ],
+  R306: [
+    "Un [différent→différend] oppose les deux associés.",
+    "Ils ont réglé leur [différent→différend] à l'amiable.",
+    "Ce modèle est [différend→différent] du précédent.",
+    "Nos avis sont [différends→différents] sur ce point.",
+    "Le [différent→différend] commercial dure depuis un an.",
+    "Elle porte une veste [différende→différente] chaque jour.",
+    "Un vieux [différent→différend] familial ressurgit.",
+    "Trois candidats [différends→différents] se présentent.",
+    "Leur différend portait sur des points très différents.",
+    "Ils ont aplani ce différend en une seule réunion."
+  ],
+  R310: [
+    "Il a cédé son [fond→fonds] de commerce.",
+    "Le [fonds→fond] du lac est particulièrement vaseux.",
+    "Les [fond→fonds] publics financent ce chantier.",
+    "Allons au [fonds→fond] du problème sans tarder.",
+    "Un [fond→fonds] de solidarité a été créé.",
+    "Il range ses outils au [fonds→fond] du garage.",
+    "Ce [fond→fonds] d'investissement recrute deux analystes.",
+    "Sur le [fonds→fond], je partage entièrement ton avis.",
+    "Sur le fond, ce fonds de commerce vaut cher.",
+    "Au fond du jardin, il avait enterré son magot."
+  ],
+  R223: [
+    "Il faudra [pallier à→pallier] ce manque de personnel.",
+    "Ces mesures [pallient au→pallient le] problème sans le résoudre.",
+    "Comment [pallier aux→pallier les] absences répétées ?",
+    "Il a [débuté→commencé] sa carrière à Lyon.",
+    "Le pilote a [démarré→lancé] la course en tête.",
+    "Il a [échappé son verre→laissé tomber son verre] sur le carrelage.",
+    "Ces retards ont [empiré la situation→aggravé la situation].",
+    "Rien ne peut [pallier à→pallier] son absence.",
+    "Ces mesures pallient la pénurie de logements.",
+    "Le concert a commencé à l'heure et la situation s'est améliorée."
+  ],
+  R314: [
+    "On fait une [pose→pause] café dans dix minutes ?",
+    "La [pause→pose] du carrelage prendra deux jours.",
+    "Il a marqué une [pose→pause] avant de répondre.",
+    "La [pause→pose] de la première pierre aura lieu lundi.",
+    "Prenons une [pose→pause] de dix minutes.",
+    "Le photographe demande une [pause→pose] naturelle.",
+    "Elle prend la [pause→pose] devant l'objectif.",
+    "La [pose→pause] déjeuner dure une heure pile.",
+    "Après la pause, la pose du parquet a repris.",
+    "Il prend la pose sans jamais faire de pause."
+  ],
+  R315: [
+    "Il a su tirer [partie→parti] de la situation.",
+    "Elle fait [parti→partie] du jury cette année.",
+    "Prendre [partie→parti] pour l'un ou l'autre est délicat.",
+    "Le juge l'a pris à [parti→partie] publiquement.",
+    "Son [partie→parti] pris agace les lecteurs.",
+    "Nous avons gagné en [parti→partie] grâce à toi.",
+    "Il tire [partie→parti] de chacune de ses erreurs.",
+    "Ces terres font [parti→partie] du domaine familial.",
+    "Il a tiré parti de sa défaite et fait désormais partie de l'équipe.",
+    "Son parti pris a été pris à partie par la presse."
+  ],
+  R321: [
+    "Une [tache→tâche] délicate nous attend cet après-midi.",
+    "Une [tâche→tache] de café macule la nappe blanche.",
+    "Il s'acquitte de sa [tache→tâche] avec un grand sérieux.",
+    "Ce détachant enlève toutes les [tâches→taches].",
+    "Répartissons les [taches→tâches] ménagères équitablement.",
+    "Le léopard porte des [tâches→taches] noires sur le dos.",
+    "Sa [tache→tâche] consiste à trier le courrier.",
+    "Une [tâche→tache] d'huile s'étend sur l'eau du port.",
+    "Sa tâche du jour : faire partir cette tache de vin.",
+    "Chaque tâche lui pesait, même effacer une simple tache."
+  ],
+  R322: [
+    "Un pays en [voix→voie] de développement rapide.",
+    "Il a recueilli la majorité des [voies→voix].",
+    "Elle chante d'une [voie→voix] grave et posée.",
+    "La [voix→voie] ferrée longe la rivière sur dix kilomètres.",
+    "Parlez à [voie→voix] basse, s'il vous plaît.",
+    "Nous sommes enfin sur la bonne [voix→voie].",
+    "Le candidat a obtenu deux cents [voies→voix].",
+    "La [voix→voie] express est saturée dès sept heures.",
+    "Sa voix tremblait, mais il était sur la bonne voie.",
+    "Chaque voix compte : c'est la voie de la démocratie."
+  ],
+  R2: [
+    "[Autant→Au temps] pour moi, j'avais mal lu la consigne.",
+    "Il a reconnu son erreur : « [autant→au temps] pour moi ! »",
+    "[Autant→Au temps] pour moi, la réunion est à quinze heures.",
+    "[Au tant→Au temps] pour moi, je confondais les deux frères.",
+    "« [Autant→Au temps] pour moi », admit le professeur en souriant.",
+    "Sers-lui une part, et [au temps→autant] pour moi.",
+    "Elle a commandé deux cafés ; [au temps→autant] pour moi.",
+    "[Autant→Au temps] pour moi, je n'avais pas vu ton message.",
+    "Au temps pour moi, je m'étais trompé d'adresse.",
+    "Elle prend deux sucres, et autant pour moi."
+  ],
+});
